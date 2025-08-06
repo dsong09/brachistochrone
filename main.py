@@ -28,25 +28,20 @@ def animation():
     clock = pygame.time.Clock()
     font = pygame.font.Font("fonts/DeterminationSansWebRegular-369X.ttf", 20)
 
-    # Create a surface for the brachistochrone path with transparency
     brachisto_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
 
-    # Brachistochrone parameters to exactly match endpoint (9, 6)
-    a = 6.0 / (1 - np.cos(1.8))  # Calculated to hit y=6
-    theta_max = 1.8  # Angle that gives x=9 when scaled
+    a = 6.0 / (1 - np.cos(1.8))
+    theta_max = 1.8
 
-    # Generate cycloid points
     t = np.linspace(0, theta_max, 100)
     x_brach = a * (t - np.sin(t))
     y_brach = a * (1 - np.cos(t))
 
-    # Scale to exactly match endpoint
     x_scale = END_POINT[0] / x_brach[-1]
     y_scale = END_POINT[1] / y_brach[-1]
     x_brach = x_brach * x_scale
     y_brach = y_brach * y_scale
 
-    # Precompute cumulative path distance for brachistochrone
     cumulative_dist_brach = [0.0]
     for i in range(1, len(x_brach)):
         dx = x_brach[i] - x_brach[i - 1]
@@ -55,15 +50,12 @@ def animation():
     total_brach_length = cumulative_dist_brach[-1]
 
     def create_smooth_path():
-        # Create random control points with fixed start and end
         x_control = np.linspace(START_POINT[0], END_POINT[0], NUM_CONTROL_POINTS + 2)
         y_control = np.random.uniform(0.0, 8.0, NUM_CONTROL_POINTS + 2)
 
-        # Fix start and end points
         y_control[0] = START_POINT[1]
         y_control[-1] = END_POINT[1]
 
-        # Create cubic spline
         spline = CubicSpline(x_control, y_control)
         x_smooth = np.linspace(START_POINT[0], END_POINT[0], 500)
         y_smooth = spline(x_smooth)
@@ -72,7 +64,6 @@ def animation():
     x_path, y_path, spline, x_control, y_control = create_smooth_path()
     spline_deriv = spline.derivative()
 
-    # Precompute cumulative path distance for cubic spline
     cumulative_dist_cubic = [0.0]
     for i in range(1, len(x_path)):
         dx = x_path[i] - x_path[i - 1]
@@ -80,18 +71,16 @@ def animation():
         cumulative_dist_cubic.append(cumulative_dist_cubic[-1] + np.sqrt(dx ** 2 + dy ** 2))
     total_cubic_length = cumulative_dist_cubic[-1]
 
-    # Function to get position from distance
     def get_position_from_distance(dist, path_type):
         if path_type == "CUBIC":
             cumulative_dist = cumulative_dist_cubic
             x_path_curr = x_path
             y_path_curr = y_path
-        else:  # brachistochrone
+        else:
             cumulative_dist = cumulative_dist_brach
             x_path_curr = x_brach
             y_path_curr = y_brach
 
-        # Find the segment containing the distance
         idx = 0
         while idx < len(cumulative_dist) - 1 and cumulative_dist[idx + 1] < dist:
             idx += 1
@@ -99,7 +88,6 @@ def animation():
         if idx >= len(cumulative_dist) - 1:
             return END_POINT[0], END_POINT[1]
 
-        # Calculate position within the segment
         seg_start_dist = cumulative_dist[idx]
         seg_end_dist = cumulative_dist[idx + 1]
         seg_length = seg_end_dist - seg_start_dist
@@ -169,12 +157,10 @@ def animation():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                elif event.key == pygame.K_r:  # Reset simulation
-                    # Generate a new random path
+                elif event.key == pygame.K_r:
                     x_path, y_path, spline, x_control, y_control = create_smooth_path()
                     spline_deriv = spline.derivative()
 
-                    # Recompute cumulative path distance for cubic
                     cumulative_dist_cubic = [0.0]
                     for i in range(1, len(x_path)):
                         dx = x_path[i] - x_path[i - 1]
@@ -182,11 +168,9 @@ def animation():
                         cumulative_dist_cubic.append(cumulative_dist_cubic[-1] + np.sqrt(dx ** 2 + dy ** 2))
                     total_cubic_length = cumulative_dist_cubic[-1]
 
-                    # Update path points
                     path_points = [world_to_screen(x, y) for x, y in zip(x_path, y_path)]
                     control_points_screen = [world_to_screen(x, y) for x, y in zip(x_control, y_control)]
 
-                    # Reset ball
                     current_distance = 0.0
                     ball_velocity = 0.0
                     start_time = time.time()
@@ -256,8 +240,8 @@ def animation():
         pygame.draw.circle(screen, RED, (ball_screen_x, ball_screen_y), ball_radius)
 
         slope_angle = get_slope_from_distance(current_distance, current_path_type)
-        vx = ball_velocity * np.cos(slope_angle)  # x-component (horizontal)
-        vy = ball_velocity * np.sin(slope_angle)  # y-component (vertical)
+        vx = ball_velocity * np.cos(slope_angle)
+        vy = ball_velocity * np.sin(slope_angle)
 
         elapsed = physics_time
 
