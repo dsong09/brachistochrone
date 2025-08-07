@@ -92,7 +92,7 @@ def animation():
             prev_distance = current_distance
             prev_velocity = ball_velocity
 
-            slope = pathgen.get_slope_from_distance(current_distance, current_path_type)
+            slope = pathgen.slope_from_distance(current_distance, current_path_type)
             acceleration = GRAVITY * np.sin(slope)
             ball_velocity += acceleration * dt
 
@@ -112,7 +112,7 @@ def animation():
                 current_distance = new_distance
                 physics_time += dt
 
-        ball_x, ball_y = pathgen.get_position_from_distance(current_distance, current_path_type)
+        ball_x, ball_y = pathgen.position_from_distance(current_distance, current_path_type)
         ball_screen_x, ball_screen_y = world_to_screen(ball_x, ball_y, scale_x, scale_y, offset_x, offset_y)
 
         screen.fill(BLACK)
@@ -135,7 +135,7 @@ def animation():
         pygame.draw.circle(screen, WHITE, end_screen, 4)
         pygame.draw.circle(screen, RED, (ball_screen_x, ball_screen_y), 10)
 
-        slope_angle = pathgen.get_slope_from_distance(current_distance, current_path_type)
+        slope_angle = pathgen.slope_from_distance(current_distance, current_path_type)
         vx = ball_velocity * np.cos(slope_angle)
         vy = ball_velocity * np.sin(slope_angle)
 

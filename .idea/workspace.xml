@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5971f60d-4844-4ade-b466-b1ac379f6e99" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/brachistochrone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/brachistochrone.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/path_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brachistochrone_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/brachistochrone_env.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +52,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dsong\PycharmProjects\brachistochrone" />
       <recent name="C:\Users\dsong\PycharmProjects\PythonProject\brachistochrone" />
     </key>
   </component>
@@ -79,7 +77,7 @@
       <workItem from="1754515798696" duration="137000" />
       <workItem from="1754516113211" duration="40000" />
       <workItem from="1754516162898" duration="6431000" />
-      <workItem from="1754602127353" duration="1834000" />
+      <workItem from="1754602127353" duration="3462000" />
     </task>
     <servers />
   </component>

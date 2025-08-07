@@ -60,7 +60,7 @@ class PathGenerator:
         self.cumulative_dist_cubic = self.cumulative_distances(self.x_path, self.y_path)
         self.total_cubic_length = self.cumulative_dist_cubic[-1]
 
-    def get_position_from_distance(self, dist, path_type):
+    def position_from_distance(self, dist, path_type):
         if path_type == "CUBIC":
             cumulative = self.cumulative_dist_cubic
             x_path, y_path = self.x_path, self.y_path
@@ -77,9 +77,9 @@ class PathGenerator:
         y = y_path[idx] + frac * (y_path[idx + 1] - y_path[idx])
         return x, y
 
-    def get_slope_from_distance(self, dist, path_type):
+    def slope_from_distance(self, dist, path_type):
         if path_type == "CUBIC":
-            x, _ = self.get_position_from_distance(dist, path_type)
+            x, _ = self.position_from_distance(dist, path_type)
             return np.arctan(self.spline_deriv(x))
         else:
             cumulative = self.cumulative_dist_brach
