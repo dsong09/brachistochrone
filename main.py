@@ -30,7 +30,7 @@ def animation():
     clock = pygame.time.Clock()
     font = pygame.font.Font("fonts/DeterminationSansWebRegular-369X.ttf", 20)
 
-    brach_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    brachistochrone_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
     pathgen = PathGenerator(START_POINT, END_POINT, NUM_CONTROL_POINTS)
 
     x_min, x_max = -1.0, 10.0
@@ -96,7 +96,7 @@ def animation():
         ball_screen_x, ball_screen_y = world_to_screen(ball_x, ball_y, scale_x, scale_y, offset_x, offset_y)
 
         screen.fill(BLACK)
-        screen.blit(brach_surface, (0, 0))
+        screen.blit(brachistochrone_surface, (0, 0))
 
         cubic_points = [world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y) for x, y in zip(pathgen.x_path, pathgen.y_path)]
         if len(cubic_points) > 1:

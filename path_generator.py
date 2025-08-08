@@ -52,6 +52,16 @@ class PathGenerator:
         self.y_control[0] = self.start[1]
         self.y_control[-1] = self.end[1]
 
+        self.update_spline()
+
+    def generate_agent_path(self, y_control_points: np.ndarray):
+        if len(y_control_points) != self.num_points:
+            raise ValueError(f"Expected {self.num_points} control points, got {len(y_control_points)}")
+
+        self.y_control[1:-1] = y_control_points
+        self.update_spline()
+
+    def update_spline(self):
         self.spline = CubicSpline(self.x_control, self.y_control)
         self.x_path = np.linspace(self.start[0], self.end[0], 1000)
         self.y_path = self.spline(self.x_path)
