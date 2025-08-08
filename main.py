@@ -2,8 +2,8 @@ import pygame
 import numpy as np
 from scipy.interpolate import CubicSpline
 from path_generator import PathGenerator
+from physics import update_motion, FPS
 
-FPS = 120
 START_POINT = (0.0, 0.0)
 END_POINT = (9.0, 6.0)
 NUM_CONTROL_POINTS = 20
@@ -13,13 +13,10 @@ HEIGHT = 600
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 ORANGE = (255, 165, 0)
-GRAY = (128, 128, 128)
 BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
 
 X_PADDING = 1.0
 Y_PADDING = 1.0
-GRAVITY = 9.8
 
 def world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y):
     screen_x = int((x - offset_x) * scale_x)
@@ -34,13 +31,10 @@ def animation():
     font = pygame.font.Font("fonts/DeterminationSansWebRegular-369X.ttf", 20)
 
     brach_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-
     pathgen = PathGenerator(START_POINT, END_POINT, NUM_CONTROL_POINTS)
 
-    x_min = -1.0
-    x_max = 10.0
-    y_min = -1.0
-    y_max = 8.0
+    x_min, x_max = -1.0, 10.0
+    y_min, y_max = -1.0, 8.0
 
     x_range = (x_max - x_min) + 2 * X_PADDING
     y_range = (y_max - y_min) + 2 * Y_PADDING
@@ -76,40 +70,26 @@ def animation():
                     current_path_type = "CUBIC"
 
                 elif event.key == pygame.K_t:
-                    if current_path_type == "CUBIC":
-                        current_path_type = "BRACHISTOCHRONE"
-                    else:
-                        current_path_type = "CUBIC"
+                    current_path_type = "BRACHISTOCHRONE" if current_path_type == "CUBIC" else "CUBIC"
                     current_distance = 0.0
                     ball_velocity = 0.0
                     physics_time = 0.0
                     has_reached_end = False
 
-        if has_reached_end:
-            dt = 0
-        else:
-            dt = 1.0 / FPS
+        dt = 0 if has_reached_end else 1.0 / FPS
+        if not has_reached_end:
             prev_distance = current_distance
             prev_velocity = ball_velocity
 
-            slope = pathgen.slope_from_distance(current_distance, current_path_type)
-            acceleration = GRAVITY * np.sin(slope)
-            ball_velocity += acceleration * dt
+            current_distance, ball_velocity, has_reached_end = update_motion(
+                current_distance, ball_velocity, pathgen, current_path_type, dt
+            )
 
-            new_distance = current_distance + ball_velocity * dt
-            total_path_length = (pathgen.total_cubic_length if current_path_type == "CUBIC" else pathgen.total_brach_length)
-
-            if new_distance < 0:
-                ball_velocity = 0
-                physics_time += dt
-            elif new_distance > total_path_length:
-                distance_to_end = total_path_length - prev_distance
+            if current_distance == pathgen.total_cubic_length or current_distance == pathgen.total_brach_length:
+                distance_to_end = (pathgen.total_cubic_length if current_path_type == "CUBIC" else pathgen.total_brach_length) - prev_distance
                 partial_time = distance_to_end / prev_velocity if prev_velocity > 0 else 0
-                current_distance = total_path_length
-                has_reached_end = True
                 physics_time += partial_time
             else:
-                current_distance = new_distance
                 physics_time += dt
 
         ball_x, ball_y = pathgen.position_from_distance(current_distance, current_path_type)
@@ -118,14 +98,14 @@ def animation():
         screen.fill(BLACK)
         screen.blit(brach_surface, (0, 0))
 
-        cubic_points = [(world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y)) for x, y in zip(pathgen.x_path, pathgen.y_path)]
+        cubic_points = [world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y) for x, y in zip(pathgen.x_path, pathgen.y_path)]
         if len(cubic_points) > 1:
             pygame.draw.lines(screen, WHITE, False, cubic_points, 3)
 
         spline = CubicSpline(pathgen.x_brach, pathgen.y_brach)
         x_spline = np.linspace(pathgen.x_brach[0], pathgen.x_brach[-1], 500)
         y_spline = spline(x_spline)
-        brach_points = [(world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y)) for x, y in zip(x_spline, y_spline)]
+        brach_points = [world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y) for x, y in zip(x_spline, y_spline)]
         if len(brach_points) > 1:
             pygame.draw.lines(screen, ORANGE, False, brach_points, 3)
 
