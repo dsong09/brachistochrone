@@ -13,7 +13,7 @@ def update_motion(current_distance, ball_velocity, path, path_type, dt=1.0 / FPS
     ball_velocity += acceleration * dt
     new_distance = current_distance + ball_velocity * dt
 
-    total_path_length = path.total_cubic_length if path_type == "CUBIC" else path.total_brach_length
+    total_path_length = path.total_cubic_length if path_type == "AGENT" else path.total_brach_length
 
     done = False
     if new_distance >= total_path_length:

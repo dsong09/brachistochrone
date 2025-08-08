@@ -71,7 +71,7 @@ class PathGenerator:
         self.total_cubic_length = self.cumulative_dist_cubic[-1]
 
     def position_from_distance(self, dist, path_type):
-        if path_type == "CUBIC":
+        if path_type == "AGENT":
             cumulative = self.cumulative_dist_cubic
             x_path, y_path = self.x_path, self.y_path
         else:

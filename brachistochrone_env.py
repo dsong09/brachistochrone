@@ -17,7 +17,7 @@ class BrachistochroneEnv:
         return self.get_observation()
 
     def get_observation(self):
-        x, y = self.path.position_from_distance(self.current_distance, "CUBIC")
+        x, y = self.path.position_from_distance(self.current_distance, "AGENT")
         return {
             "position": (x, y),
             "velocity": self.ball_velocity,
@@ -32,7 +32,7 @@ class BrachistochroneEnv:
             self.current_distance,
             self.ball_velocity,
             self.path,
-            "CUBIC",
+            "AGENT",
             dt
         )
 

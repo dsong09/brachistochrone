@@ -48,8 +48,8 @@ def animation():
     current_distance = 0.0
     ball_velocity = 0.0
     physics_time = 0.0
-    has_reached_end = False
-    current_path_type = "CUBIC"
+    reached_end = False
+    current_path_type = "AGENT"
 
     running = True
     while running:
@@ -66,27 +66,27 @@ def animation():
                     current_distance = 0.0
                     ball_velocity = 0.0
                     physics_time = 0.0
-                    has_reached_end = False
-                    current_path_type = "CUBIC"
+                    reached_end = False
+                    current_path_type = "AGENT"
 
                 elif event.key == pygame.K_t:
-                    current_path_type = "BRACHISTOCHRONE" if current_path_type == "CUBIC" else "CUBIC"
+                    current_path_type = "BRACHISTOCHRONE" if current_path_type == "AGENT" else "AGENT"
                     current_distance = 0.0
                     ball_velocity = 0.0
                     physics_time = 0.0
-                    has_reached_end = False
+                    reached_end = False
 
-        dt = 0 if has_reached_end else 1.0 / FPS
-        if not has_reached_end:
+        dt = 0 if reached_end else 1.0 / FPS
+        if not reached_end:
             prev_distance = current_distance
             prev_velocity = ball_velocity
 
-            current_distance, ball_velocity, has_reached_end = update_motion(
+            current_distance, ball_velocity, reached_end = update_motion(
                 current_distance, ball_velocity, pathgen, current_path_type, dt
             )
 
             if current_distance == pathgen.total_cubic_length or current_distance == pathgen.total_brach_length:
-                distance_to_end = (pathgen.total_cubic_length if current_path_type == "CUBIC" else pathgen.total_brach_length) - prev_distance
+                distance_to_end = (pathgen.total_cubic_length if current_path_type == "AGENT" else pathgen.total_brach_length) - prev_distance
                 partial_time = distance_to_end / prev_velocity if prev_velocity > 0 else 0
                 physics_time += partial_time
             else:
