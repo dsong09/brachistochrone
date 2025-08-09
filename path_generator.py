@@ -1,14 +1,21 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
 
+START_POINT = (0.0, 0.0)
+END_POINT = (9.0, 6.0)
+NUM_CONTROL_POINTS = 20
+
 class PathGenerator:
-    def __init__(self, start, end, num_points):
+    def __init__(self, start=START_POINT, end=END_POINT, num_points=NUM_CONTROL_POINTS):
         self.start = start
         self.end = end
         self.num_points = num_points
 
-        self.x_control = np.array([])
-        self.y_control = np.array([])
+        self.x_control = np.linspace(self.start[0], self.end[0], self.num_points + 2)
+        self.y_control = np.zeros(self.num_points + 2)
+        self.y_control[0] = self.start[1]
+        self.y_control[-1] = self.end[1]
+
         self.spline = None
         self.x_path = np.array([])
         self.y_path = np.array([])
@@ -22,7 +29,7 @@ class PathGenerator:
         self.total_brach_length = 0.0
 
         self.generate_brachistochrone()
-        self.generate_random_path()
+        self.update_spline()
 
     @staticmethod
     def cumulative_distances(x_points, y_points):
@@ -51,7 +58,6 @@ class PathGenerator:
         self.y_control = np.random.uniform(0.0, 8.0, self.num_points + 2)
         self.y_control[0] = self.start[1]
         self.y_control[-1] = self.end[1]
-
         self.update_spline()
 
     def generate_agent_path(self, y_control_points: np.ndarray):
@@ -88,7 +94,7 @@ class PathGenerator:
         return x, y
 
     def slope_from_distance(self, dist, path_type):
-        if path_type == "CUBIC":
+        if path_type == "AGENT":
             x, _ = self.position_from_distance(dist, path_type)
             return np.arctan(self.spline_deriv(x))
         else:

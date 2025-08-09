@@ -1,19 +1,16 @@
 import pygame
 import numpy as np
-from scipy.interpolate import CubicSpline
-from path_generator import PathGenerator
+from path_generator import PathGenerator, START_POINT, END_POINT, NUM_CONTROL_POINTS
 from physics import update_motion, FPS
-
-START_POINT = (0.0, 0.0)
-END_POINT = (9.0, 6.0)
-NUM_CONTROL_POINTS = 20
-WIDTH = 800
-HEIGHT = 600
+from agent import Agent
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 ORANGE = (255, 165, 0)
 BLACK = (0, 0, 0)
+
+WIDTH = 800
+HEIGHT = 600
 
 X_PADDING = 1.0
 Y_PADDING = 1.0
@@ -32,6 +29,11 @@ def animation():
 
     brachistochrone_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
     pathgen = PathGenerator(START_POINT, END_POINT, NUM_CONTROL_POINTS)
+
+    # for now, manually set limit for agent y-values
+    agent = Agent(NUM_CONTROL_POINTS, -1.0, 6.0)
+    agent.reset()
+    pathgen.generate_agent_path(agent.action())
 
     x_min, x_max = -1.0, 10.0
     y_min, y_max = -1.0, 8.0
@@ -62,7 +64,8 @@ def animation():
                     running = False
 
                 elif event.key == pygame.K_r:
-                    pathgen.generate_random_path()
+                    agent.reset()
+                    pathgen.generate_agent_path(agent.action())
                     current_distance = 0.0
                     ball_velocity = 0.0
                     physics_time = 0.0
@@ -77,20 +80,16 @@ def animation():
                     reached_end = False
 
         dt = 0 if reached_end else 1.0 / FPS
+
         if not reached_end:
             prev_distance = current_distance
             prev_velocity = ball_velocity
 
-            current_distance, ball_velocity, reached_end = update_motion(
+            current_distance, ball_velocity, reached_end, partial_dt = update_motion(
                 current_distance, ball_velocity, pathgen, current_path_type, dt
             )
 
-            if current_distance == pathgen.total_cubic_length or current_distance == pathgen.total_brach_length:
-                distance_to_end = (pathgen.total_cubic_length if current_path_type == "AGENT" else pathgen.total_brach_length) - prev_distance
-                partial_time = distance_to_end / prev_velocity if prev_velocity > 0 else 0
-                physics_time += partial_time
-            else:
-                physics_time += dt
+            physics_time += partial_dt
 
         ball_x, ball_y = pathgen.position_from_distance(current_distance, current_path_type)
         ball_screen_x, ball_screen_y = world_to_screen(ball_x, ball_y, scale_x, scale_y, offset_x, offset_y)
@@ -102,10 +101,7 @@ def animation():
         if len(cubic_points) > 1:
             pygame.draw.lines(screen, WHITE, False, cubic_points, 3)
 
-        spline = CubicSpline(pathgen.x_brach, pathgen.y_brach)
-        x_spline = np.linspace(pathgen.x_brach[0], pathgen.x_brach[-1], 500)
-        y_spline = spline(x_spline)
-        brach_points = [world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y) for x, y in zip(x_spline, y_spline)]
+        brach_points = [world_to_screen(x, y, scale_x, scale_y, offset_x, offset_y) for x, y in zip(pathgen.x_brach, pathgen.y_brach)]
         if len(brach_points) > 1:
             pygame.draw.lines(screen, ORANGE, False, brach_points, 3)
 
