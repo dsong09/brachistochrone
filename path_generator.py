@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
+from scipy.optimize import fsolve
 
 START_POINT = (0.0, 0.0)
 END_POINT = (9.0, 6.0)
@@ -39,8 +40,12 @@ class PathGenerator:
         return np.concatenate([[0.0], np.cumsum(distances)])
 
     def generate_brachistochrone(self):
-        theta_max = 1.8
-        a = 6.0 / (1 - np.cos(theta_max))
+        def solve_theta(theta):
+            return (theta - np.sin(theta)) / (1 - np.cos(theta)) - (self.end[0] / self.end[-1])
+
+        theta_max = fsolve(solve_theta, 3.0)[0]
+
+        a = self.end[-1] / (1 - np.cos(theta_max))
         t = np.linspace(0, theta_max, 10000)
         x = a * (t - np.sin(t))
         y = a * (1 - np.cos(t))

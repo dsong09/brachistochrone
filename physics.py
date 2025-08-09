@@ -1,7 +1,7 @@
 import numpy as np
 
 FPS = 120
-GRAVITY = 9.8
+GRAVITY = 9.81
 
 def update_motion(current_distance, ball_velocity, path, path_type, dt=1.0/FPS):
     # update distance/velocity after dt seconds

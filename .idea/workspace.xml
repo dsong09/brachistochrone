@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5971f60d-4844-4ade-b466-b1ac379f6e99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/brachistochrone_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/brachistochrone_env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/path_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/path_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/physics.py" beforeDir="false" afterPath="$PROJECT_DIR$/physics.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +82,8 @@
       <workItem from="1754516162898" duration="6431000" />
       <workItem from="1754602127353" duration="11083000" />
       <workItem from="1754670149875" duration="2099000" />
-      <workItem from="1754678700130" duration="3328000" />
+      <workItem from="1754678700130" duration="3530000" />
+      <workItem from="1754765643551" duration="292000" />
     </task>
     <servers />
   </component>
@@ -106,7 +103,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/brachistochrone$train.coverage" NAME="train Coverage Results" MODIFIED="1754620897333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/brachistochrone$main.coverage" NAME="main Coverage Results" MODIFIED="1754699751475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/brachistochrone$main.coverage" NAME="main Coverage Results" MODIFIED="1754700352124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/brachistochrone$physics.coverage" NAME="physics Coverage Results" MODIFIED="1754611890167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/brachistochrone$path_generator.coverage" NAME="path_generator Coverage Results" MODIFIED="1754620672586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/brachistochrone$utils.coverage" NAME="utils Coverage Results" MODIFIED="1754358746731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
