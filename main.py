@@ -51,6 +51,7 @@ def animation():
     ball_velocity = 0.0
     physics_time = 0.0
     reached_end = False
+    printed_time_check = False
     current_path_type = "AGENT"
 
     running = True
@@ -117,6 +118,14 @@ def animation():
 
         elapsed = physics_time
 
+        # view parameters and test simulation time vs. actual time
+        if reached_end and current_path_type == "BRACHISTOCHRONE" and not printed_time_check:
+            print("Brachistochrone Max Angle:", pathgen.theta_max)
+            print("Cycloid Parameter A:", pathgen.a_brach)
+            print("Simulation Time:", physics_time)
+            print("Analytical Time:", pathgen.travel_time_brach())
+            printed_time_check = True
+
         text_x = WIDTH - 220
         text_y = 10
 
@@ -140,3 +149,4 @@ def animation():
 
 if __name__ == "__main__":
     animation()
+

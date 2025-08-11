@@ -1,10 +1,11 @@
 import numpy as np
+from physics import GRAVITY
 from scipy.interpolate import CubicSpline
 from scipy.optimize import fsolve
 
 START_POINT = (0.0, 0.0)
 END_POINT = (9.0, 6.0)
-NUM_CONTROL_POINTS = 20
+NUM_CONTROL_POINTS = 32
 
 class PathGenerator:
     def __init__(self, start=START_POINT, end=END_POINT, num_points=NUM_CONTROL_POINTS):
@@ -24,6 +25,9 @@ class PathGenerator:
 
         self.x_brach = np.array([])
         self.y_brach = np.array([])
+        self.a_brach = 0.0
+        self.theta_max = 0.0
+
         self.cumulative_dist_cubic = []
         self.cumulative_dist_brach = []
         self.total_cubic_length = 0.0
@@ -43,12 +47,14 @@ class PathGenerator:
         def solve_theta(theta):
             return (theta - np.sin(theta)) / (1 - np.cos(theta)) - (self.end[0] / self.end[-1])
 
-        theta_max = fsolve(solve_theta, 3.0)[0]
+        # solving for cycloid parameter a
+        self.theta_max = fsolve(solve_theta, 3.0)[0]
+        self.a_brach = self.end[-1] / (1 - np.cos(self.theta_max))
+        t = np.linspace(0, self.theta_max, 10000)
 
-        a = self.end[-1] / (1 - np.cos(theta_max))
-        t = np.linspace(0, theta_max, 10000)
-        x = a * (t - np.sin(t))
-        y = a * (1 - np.cos(t))
+        # analytical solution: cycloid
+        x = self.a_brach * (t - np.sin(t))
+        y = self.a_brach * (1.0 - np.cos(t))
 
         x_scale = self.end[0] / x[-1]
         y_scale = self.end[1] / y[-1]
@@ -58,12 +64,8 @@ class PathGenerator:
         self.cumulative_dist_brach = self.cumulative_distances(self.x_brach, self.y_brach)
         self.total_brach_length = self.cumulative_dist_brach[-1]
 
-    def generate_random_path(self):
-        self.x_control = np.linspace(self.start[0], self.end[0], self.num_points + 2)
-        self.y_control = np.random.uniform(0.0, 8.0, self.num_points + 2)
-        self.y_control[0] = self.start[1]
-        self.y_control[-1] = self.end[1]
-        self.update_spline()
+    def travel_time_brach(self):
+        return np.sqrt(self.a_brach / GRAVITY) * self.theta_max
 
     def generate_agent_path(self, y_control_points: np.ndarray):
         if len(y_control_points) != self.num_points:
