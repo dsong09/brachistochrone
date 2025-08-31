@@ -1,5 +1,5 @@
 import numpy as np
-from path_generator import PathGenerator, START_POINT, END_POINT, NUM_CONTROL_POINTS
+from path_generator import PathGenerator, START_POINT, END_POINT
 from brachistochrone_env import BrachistochroneEnv
 from agent import Agent
 from replay_buffer import ReplayBuffer
@@ -47,9 +47,9 @@ def run_episode(env, agent, replay_buffer):
     return total_reward
 
 if __name__ == "__main__":
-    path = PathGenerator(START_POINT, END_POINT, NUM_CONTROL_POINTS)
+    path = PathGenerator(START_POINT, END_POINT)
     env = BrachistochroneEnv(path)
-    agent = Agent(NUM_CONTROL_POINTS, y_min=-1.0, y_max=6.0)
+    agent = Agent(y_min=-1.0, y_max=6.0)
 
     buffer_size = 100000
     batch_size = 64
